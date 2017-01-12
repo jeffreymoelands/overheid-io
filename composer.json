@@ -19,7 +19,7 @@
   },
   "autoload": {
     "psr-4": {
-      "jeffreymoelands\\overheid\\": "src"
+      "Jeffreymoelands\\OverheidIo\\": "src"
     }
   },
   "autoload-dev": {
