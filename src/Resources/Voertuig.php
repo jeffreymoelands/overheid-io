@@ -4,9 +4,14 @@ namespace Jeffreymoelands\OverheidIo\Resources;
 class Voertuig extends Api
 {
 
+    /**
+     * Voertuig constructor.
+     *
+     * @param $key
+     */
     public function __construct($key)
     {
-        $this->setResource('voertuiggegevens');
+        $this->resource = 'voertuiggegevens';
 
         parent::__construct($key);
     }

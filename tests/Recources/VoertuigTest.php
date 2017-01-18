@@ -20,9 +20,6 @@ class VoertuigTest extends TestCase
 
         // Check correct class type
         $this->assertTrue($voertuig instanceof \Jeffreymoelands\OverheidIo\Resources\Voertuig);
-
-        // Check resource isset correctly
-        $this->assertEquals($this->resource, $voertuig->getResource());
     }
 
 
@@ -34,7 +31,7 @@ class VoertuigTest extends TestCase
         // mock the api class
         $mock = m::mock(Voertuig::class)->shouldAllowMockingProtectedMethods();
         $mock->shouldReceive('getResource')->once()->andReturn($this->resource);
-        $mock->shouldReceive('call')->once()->andReturn('response');
+        $mock->shouldReceive('call')->once()->with('/api/voertuiggegevens/01-JB-LP')->andReturn('response');
 
         // create reflection class and call the test method
         $class = new ReflectionClass(Voertuig::class);
@@ -54,7 +51,7 @@ class VoertuigTest extends TestCase
         // mock the api class
         $mock = m::mock(Voertuig::class)->shouldAllowMockingProtectedMethods();
         $mock->shouldReceive('getResource')->once()->andReturn($this->resource);
-        $mock->shouldReceive('call')->once()->andReturn('response');
+        $mock->shouldReceive('call')->once()->with('/api/voertuiggegevens')->andReturn('response');
 
         // create reflection class and call the test method
         $class = new ReflectionClass(Voertuig::class);
@@ -84,8 +81,10 @@ class VoertuigTest extends TestCase
 
         // setup bag
         $bag = new Voertuig('secret');
-        $response = $bag->size(100)->page(1)->order('desc')->fields([ 'eerstekleur', 'merk' ])
-            ->filters([ 'merk' => 'bmw' ])->query('*laren')->queryfields([ 'merk' ]);
+        $response = $bag->size(100)->page(1)->order('desc')->fields([
+            'eerstekleur',
+            'merk'
+        ])->filters([ 'merk' => 'bmw' ])->query('*laren')->queryfields([ 'merk' ]);
 
         // check instance of bag
         $this->assertTrue($response instanceof \Jeffreymoelands\OverheidIo\Resources\Voertuig);

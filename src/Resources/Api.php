@@ -13,7 +13,7 @@ abstract class Api
     /**
      * @var api base
      */
-    private $base = 'https://overheid.io/';
+    private $base;
 
     /**
      * @var api key
@@ -23,7 +23,7 @@ abstract class Api
     /**
      * @var api resource
      */
-    private $resource;
+    protected $resource;
 
 
     /**
@@ -33,6 +33,7 @@ abstract class Api
      */
     public function __construct($key)
     {
+        $this->base = 'https://overheid.io/';
         $this->key = $key;
     }
 
@@ -70,32 +71,46 @@ abstract class Api
      */
     protected function call($url)
     {
-        // setup client with instance of HttpClientInterface
+        // setup client with instance of HttpClientInterface for easily swap out the client http class
         $client = new Client(new GuzzleHttpClient(new \GuzzleHttp\Client()));
 
+        // setup url
+        $url = $this->getBase() . $url;
+
         // call send method
-        return $client->send($this->base . $url, $this->key, $this->getQuery());
+        return $client->send($url, $this->getKey(), $this->getQuery());
     }
 
 
     /**
-     * Get api resource
+     * Get API base
      *
-     * @return mixed
+     * @return Api
      */
-    public function getResource()
+    protected function getBase()
+    {
+        return $this->base;
+    }
+
+
+    /**
+     * Get API key
+     *
+     * @return Api
+     */
+    protected function getKey()
+    {
+        return $this->key;
+    }
+
+
+    /**
+     * Get API recource
+     *
+     * @return Api
+     */
+    protected function getResource()
     {
         return $this->resource;
-    }
-
-
-    /**
-     * Set the api resource
-     *
-     * @param mixed $resource
-     */
-    protected function setResource($resource)
-    {
-        $this->resource = $resource;
     }
 }

@@ -13,6 +13,7 @@ class GuzzleHttpClientTest extends TestCase
 
     /**
      * Test the construct and configuration of the GuzzleHttpClient class
+     *
      */
     public function test_guzzle_http_client_construct()
     {
@@ -32,6 +33,7 @@ class GuzzleHttpClientTest extends TestCase
 
     /**
      * Test the call function of the GuzzleHttpClient class
+     *
      */
     public function test_guzzle_adapter_call()
     {

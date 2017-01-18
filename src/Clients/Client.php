@@ -5,6 +5,7 @@ use Jeffreymoelands\OverheidIo\Interfaces\HttpClientInterface;
 
 class Client
 {
+
     /**
      * Client to call
      */

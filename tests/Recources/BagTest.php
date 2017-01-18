@@ -21,9 +21,6 @@ class BagTest extends TestCase
 
         // Check correct class type
         $this->assertTrue($bag instanceof \Jeffreymoelands\OverheidIo\Resources\Bag);
-
-        // Check resource isset correctly
-        $this->assertEquals($this->resource, $bag->getResource());
     }
 
 
@@ -35,7 +32,7 @@ class BagTest extends TestCase
         // mock the api class
         $mock = m::mock(Bag::class)->shouldAllowMockingProtectedMethods();
         $mock->shouldReceive('getResource')->once()->andReturn($this->resource);
-        $mock->shouldReceive('call')->once()->andReturn('response');
+        $mock->shouldReceive('call')->once()->with('/api/bag/3015ba-nieuwe-binnenweg-10-a')->andReturn('response');
 
         // create reflection class and call the test method
         $class = new ReflectionClass(Bag::class);
@@ -55,7 +52,7 @@ class BagTest extends TestCase
         // mock the api class
         $mock = m::mock(Kvk::class)->shouldAllowMockingProtectedMethods();
         $mock->shouldReceive('getResource')->once()->andReturn($this->resource);
-        $mock->shouldReceive('call')->once()->andReturn('response');
+        $mock->shouldReceive('call')->once()->with('/api/bag')->andReturn('response');
 
         // create reflection class and call the test method
         $class = new ReflectionClass(Bag::class);
@@ -74,8 +71,8 @@ class BagTest extends TestCase
     {
         // mock the api class
         $mock = m::mock(Kvk::class)->shouldAllowMockingProtectedMethods();
-        $mock->shouldReceive('getResource')->once()->andReturn('kvk');
-        $mock->shouldReceive('call')->once()->andReturn('response');
+        $mock->shouldReceive('getResource')->once()->andReturn($this->resource);
+        $mock->shouldReceive('call')->once()->with('/suggest/bag/nieuwve')->andReturn('response');
 
         // create reflection class and call the test method
         $class = new ReflectionClass(Kvk::class);
@@ -85,6 +82,7 @@ class BagTest extends TestCase
         // assert response
         $this->assertEquals('response', $response);
     }
+
 
     /**
      * Test the query builder for bag resource
@@ -104,8 +102,10 @@ class BagTest extends TestCase
 
         // setup bag
         $bag = new Bag('secret');
-        $response = $bag->size(100)->page(1)->order('desc')->fields([ 'huisnummer', 'openbareruimtenaam' ])
-            ->filters([ 'postcode' => '4866EN' ])->query('10')->queryfields([ 'huisnummer' ]);
+        $response = $bag->size(100)->page(1)->order('desc')->fields([
+            'huisnummer',
+            'openbareruimtenaam'
+        ])->filters([ 'postcode' => '4866EN' ])->query('10')->queryfields([ 'huisnummer' ]);
 
         // check instance of bag
         $this->assertTrue($response instanceof \Jeffreymoelands\OverheidIo\Resources\Bag);

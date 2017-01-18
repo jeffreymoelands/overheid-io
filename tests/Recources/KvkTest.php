@@ -20,9 +20,6 @@ class KvkTest extends TestCase
 
         // Check correct class type
         $this->assertTrue($kvk instanceof \Jeffreymoelands\OverheidIo\Resources\Kvk);
-
-        // Check resource isset correctly
-        $this->assertEquals($this->resource, $kvk->getResource());
     }
 
 
@@ -34,7 +31,7 @@ class KvkTest extends TestCase
         // mock the api class
         $mock = m::mock(Kvk::class)->shouldAllowMockingProtectedMethods();
         $mock->shouldReceive('getResource')->once()->andReturn($this->resource);
-        $mock->shouldReceive('call')->once()->andReturn('response');
+        $mock->shouldReceive('call')->once()->with('/api/kvk/1/0001')->andReturn('response');
 
         // create reflection class and call the test method
         $class = new ReflectionClass(Kvk::class);
@@ -54,7 +51,7 @@ class KvkTest extends TestCase
         // mock the api class
         $mock = m::mock(Kvk::class)->shouldAllowMockingProtectedMethods();
         $mock->shouldReceive('getResource')->once()->andReturn($this->resource);
-        $mock->shouldReceive('call')->once()->andReturn('response');
+        $mock->shouldReceive('call')->once()->with('/api/kvk')->andReturn('response');
 
         // create reflection class and call the test method
         $class = new ReflectionClass(Kvk::class);
@@ -74,7 +71,7 @@ class KvkTest extends TestCase
         // mock the api class
         $mock = m::mock(Kvk::class)->shouldAllowMockingProtectedMethods();
         $mock->shouldReceive('getResource')->once()->andReturn($this->resource);
-        $mock->shouldReceive('call')->once()->andReturn('response');
+        $mock->shouldReceive('call')->once()->with('/suggest/kvk/valk')->andReturn('response');
 
         // create reflection class and call the test method
         $class = new ReflectionClass(Kvk::class);
@@ -84,6 +81,7 @@ class KvkTest extends TestCase
         // assert response
         $this->assertEquals('response', $response);
     }
+
 
     /**
      * Test the query builder for kvk resource
@@ -103,8 +101,7 @@ class KvkTest extends TestCase
 
         // setup bag
         $bag = new Kvk('secret');
-        $response = $bag->size(10)->page(2)->order('asc')->fields([ 'vestigingsnummer' ])
-            ->filters([ 'postcode' => '3083cz' ])->query('d*size*')->queryfields([ 'handelsnaam' ]);
+        $response = $bag->size(10)->page(2)->order('asc')->fields([ 'vestigingsnummer' ])->filters([ 'postcode' => '3083cz' ])->query('d*size*')->queryfields([ 'handelsnaam' ]);
 
         // check instance of bag
         $this->assertTrue($response instanceof \Jeffreymoelands\OverheidIo\Resources\Kvk);

@@ -10,6 +10,7 @@ class ClientTest extends TestCase
 
     /**
      * Test the construct and configuration of the client class
+     *
      */
     public function test_client_construct()
     {
@@ -21,8 +22,10 @@ class ClientTest extends TestCase
         $this->assertTrue($client instanceof \Jeffreymoelands\OverheidIo\Clients\Client);
     }
 
+
     /**
      * Test the client send method
+     *
      */
     public function test_client_send()
     {

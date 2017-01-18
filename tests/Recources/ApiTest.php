@@ -8,34 +8,51 @@ use Mockery as m;
 class ApiTest extends TestCase
 {
 
+    /**
+     * Test the get function of the abstract api class
+     *
+     */
     public function test_api_get()
     {
         // mock the api class
         $mock = m::mock(Api::class)->shouldAllowMockingProtectedMethods();
         $mock->shouldReceive('getResource')->once()->andReturn('resource');
-        $mock->shouldReceive('call')->once()->andReturn('resource');
+        $mock->shouldReceive('call')->once()->with('/api/resource/1')->andReturn('response');
 
         // create reflection class and call the test method
         $class = new ReflectionClass(Api::class);
         $getMethod = $class->getMethod('get');
-        $getMethod->invoke($mock, '1');
+        $response = $getMethod->invoke($mock, '1');
+
+        // assert response
+        $this->assertEquals('response', $response);
     }
 
 
+    /**
+     * Test the search function of the abstract api class
+     *
+     */
     public function test_api_search()
     {
         // mock the api class
         $mock = m::mock(Api::class)->shouldAllowMockingProtectedMethods();
         $mock->shouldReceive('getResource')->once()->andReturn('resource');
-        $mock->shouldReceive('call')->once()->andReturn('resource');
+        $mock->shouldReceive('call')->once()->with('/api/resource')->andReturn('response');
 
         // create reflection class and call the test method
         $class = new ReflectionClass(Api::class);
         $searchMethod = $class->getMethod('search');
-        $searchMethod->invoke($mock);
+        $response = $searchMethod->invoke($mock);
+
+        // assert response
+        $this->assertEquals('response', $response);
     }
 
+
     /**
+     * Test the call function of the abstract api class
+     *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
      */
@@ -43,7 +60,7 @@ class ApiTest extends TestCase
     {
         // mock client
         $clientmock = m::mock('overload:' . Client::class);
-        $clientmock->shouldReceive('send')->once()->andReturn('object');
+        $clientmock->shouldReceive('send')->once()->andReturn('response');
 
         // mock api class
         $mock = m::mock(Api::class);
@@ -56,14 +73,6 @@ class ApiTest extends TestCase
         $response = $callMethod->invoke($mock, '/url');
 
         // check response from client class
-        $this->assertEquals('object', $response);
-    }
-
-
-    public function tearDown()
-    {
-        // Close mockery
-        m::close();
-
+        $this->assertEquals('response', $response);
     }
 }
